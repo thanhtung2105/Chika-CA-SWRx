@@ -12,6 +12,8 @@ My Graduate Thesis project work co-operate with Chika Corporation 智家 (チカ
 
 - Central control unit: CA - HC.
 
+- Sensors system: CA - SS.
+
 
 ![image](https://user-images.githubusercontent.com/48848418/72683184-a8249100-3b07-11ea-97ea-71700537be0d.png)
 
