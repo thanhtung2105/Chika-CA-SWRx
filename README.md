@@ -22,5 +22,15 @@ My Graduate Thesis project work co-operate with Chika Corporation 智家 (チカ
 
 ⚙️ My sample product - CA-SWRx 💎
 
+![CA-SWRx_Schematics](https://user-images.githubusercontent.com/48848418/75621836-35113e80-5bcc-11ea-90c6-38af1d0425d0.jpg)
+
+![IMG_7820](https://user-images.githubusercontent.com/48848418/75621843-4bb79580-5bcc-11ea-86c5-df7839a41773.JPG)
+
+![88985467_512729202716086_2585241150193401856_n](https://user-images.githubusercontent.com/48848418/75621847-52460d00-5bcc-11ea-8ed3-d21b05d0f4b7.png)
+
+![84991761_336238490651698_1215078267019591680_n](https://user-images.githubusercontent.com/48848418/75621850-570ac100-5bcc-11ea-963c-3fd6f6b92ed4.png)
+
+![89030933_233387297703501_5613319258537721856_n](https://user-images.githubusercontent.com/48848418/75621851-5a9e4800-5bcc-11ea-9ccf-0898f9f95c31.png)
+
 
     Author: Phan Thanh Tung
