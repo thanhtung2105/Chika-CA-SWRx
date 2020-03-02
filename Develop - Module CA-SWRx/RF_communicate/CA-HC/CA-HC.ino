@@ -2,15 +2,20 @@
 #include <SPI.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <Ticker.h>
 
 /* In this product - the address (channel) to communicate is define as SWR (convert to decimal) 
 + 'date make device' + 'product no.' ; In this case, SWR is known as '83 87 82' and add with the date 
 making device for example today is Feb 17th and this is the first product in that day; then the address 
 for this SWR is: const byte address[15] = "83878217022001"  ( 83 87 82 | 17 02 20 | 01 )          */
 
+Ticker ticker;
 RF24 radio(2, 15);    //nRF24L01 (CE,CSN) connections PIN
 const byte address[15] = "83878226022001";
+boolean smartConfigStart =  false;
 
+const char *ssid = "username wifi";
+const char *password = "password wifi";
 /*
 const byte address[15] = "**************";
 const byte address[15] = "**************";
@@ -20,17 +25,19 @@ const byte address[15] = "**************";
 boolean stateButton[1];
 boolean stateButton_MQTT[1];
 
-const char *ssid = "Phong_510";
-const char *password = "phong510@hcmus";
-
 //Topic: product_id/button_id
 const char *CA_SWR = "2a0a6b88-769e-4a63-ac5d-1392a7199e88/be47fa93-15df-44b6-bdba-c821a117cd41";
+const int smartConfig_LED = 16;
 
 //Config MQTT broker information:
 const char *mqtt_server = "chika.gq";
 const int mqtt_port = 2502;
 const char *mqtt_user = "chika";
 const char *mqtt_pass = "2502";
+
+//Setup MQTT - Wifi ESP12F:
+WiFiClient esp_12F;
+PubSubClient client(esp_12F);
 
 void setup_Wifi()
 {
@@ -41,30 +48,33 @@ void setup_Wifi()
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(200);
+    delay(500);
     Serial.print(".");
   }
-    Serial.println("\n");
+    Serial.println("");
     Serial.println("WiFi connected!");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
 }
 
-//Setup MQTT - Wifi ESP12F:
-WiFiClient esp_12F;
-PubSubClient client(esp_12F);
-
 void setup()
 {
     SPI.begin();
     Serial.begin(115200);
+    pinMode(smartConfig_LED, OUTPUT);
 
     WiFi.setAutoConnect(true);
     WiFi.setAutoReconnect(true);
     WiFi.mode(WIFI_STA);
 
-    setup_Wifi();
-  
+//      setup_Wifi();
+    delay(8000);
+
+    if (WiFi.status() != WL_CONNECTED)
+    {
+    startSmartConfig();
+    }
+
     radio.begin();
     radio.setRetries(15, 15);
     radio.setPALevel(RF24_PA_MAX);
@@ -195,4 +205,43 @@ void callback(char *topic, byte *payload, unsigned int length)
 //      radio.write(&stateButton_MQTT, sizeof(stateButton_MQTT));
 //      break;
 //    } 
+}
+
+void blinking()
+{
+  bool state = digitalRead(smartConfig_LED);
+  digitalWrite(smartConfig_LED,!state);
+}
+
+boolean startSmartConfig(){
+  int t = 0;
+  Serial.println("Smart Config Start");
+  WiFi.beginSmartConfig();
+  delay(500);
+  ticker.attach(0.1, blinking);
+  while(WiFi.status() != WL_CONNECTED){
+    t++;
+    Serial.print(".");
+    delay(500);
+    if(t > 120){
+      Serial.println("Smart Config Fail");
+    smartConfigStart = false;
+    ticker.attach(0.5, blinking);
+      delay(3000);
+      exitSmartConfig();
+      return false;
+    }
+  }
+  smartConfigStart = true;
+  Serial.println("WIFI CONNECTED");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.SSID());
+  exitSmartConfig();
+  return true;
+}
+
+void exitSmartConfig(){
+  WiFi.stopSmartConfig();
+  ticker.detach();
 }
