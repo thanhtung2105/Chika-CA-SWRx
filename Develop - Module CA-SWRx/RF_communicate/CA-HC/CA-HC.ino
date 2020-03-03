@@ -186,25 +186,7 @@ void callback(char *topic, byte *payload, unsigned int length)
       radio.write(&stateButton_MQTT, sizeof(stateButton_MQTT));
       break;
     }
-   
-//  else if ((char)topic[5] == '2')
-//    switch ((char)payload[0])
-//    {
-//      case '1':
-//      radio.stopListening();
-//      stateButton_MQTT[1] = 1;
-//      
-//      radio.openWritingPipe(address);
-//      radio.write(&stateButton_MQTT, sizeof(stateButton_MQTT));
-//      break;
-//      case '0':
-//      radio.stopListening();
-//      stateButton_MQTT[1] = 0;
-//      
-//      radio.openWritingPipe(address);
-//      radio.write(&stateButton_MQTT, sizeof(stateButton_MQTT));
-//      break;
-//    } 
+  
 }
 
 void blinking()
