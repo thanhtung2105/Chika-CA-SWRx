@@ -15,7 +15,9 @@ for this SWR is: const byte address[15] = "83878217022002"	( 83 87 82 | 17 02 20
 #include <SPI.h>
 using namespace std;
 
-RF24 radio(9, 10);                         //nRF24L01 (CE,CSN) connections PIN
+int CE = 9;
+int CSN = 10;
+RF24 radio(CE, CSN);                         //nRF24L01 (CE,CSN) connections PIN
 const byte address[15] = "83878226022002"; //Changeable
 
 const int button_1 = 5;
@@ -74,12 +76,14 @@ void setup()
   SPI.begin();
   Serial.begin(9600);
   Serial.println("\nCA-SWR2 say hello to your home <3 ! ");
+
   pinMode(button_1, INPUT);
   pinMode(button_2, INPUT);
   pinMode(control_1, OUTPUT);
   pinMode(control_2, OUTPUT);
   pinMode(led_state_1, OUTPUT);
   pinMode(led_state_2, OUTPUT);
+  pinMode(CSN, OUTPUT);
 
   checkDevicesState();
   radio.begin();
@@ -116,10 +120,11 @@ void loop()
 		digitalWrite(control_1, deviceState_1);
 		digitalWrite(led_state_1, deviceState_1);
 		state_Device_sendtoHC[0] = deviceState_1;
+    state_Device_sendtoHC[1] = deviceState_2;
 		EEPROM.update(0, deviceState_1);
 
 		radio.openWritingPipe(address);
-		radio.write(&state_Device_sendtoHC[0], sizeof(state_Device_sendtoHC));
+		radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
 	}
 
   if (check_Button_2)
@@ -128,10 +133,11 @@ void loop()
 		deviceState_2 = !deviceState_2;
 		digitalWrite(control_2, deviceState_2);
 		digitalWrite(led_state_2, deviceState_2);
+    state_Device_sendtoHC[0] = deviceState_1;
 		state_Device_sendtoHC[1] = deviceState_2;
 		EEPROM.update(1, deviceState_2);
 
 		radio.openWritingPipe(address);
-		radio.write(&state_Device_sendtoHC[1], sizeof(state_Device_sendtoHC));
+		radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
 	}
 }
