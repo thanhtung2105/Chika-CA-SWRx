@@ -140,10 +140,12 @@ void loop()
 		digitalWrite(control_1, deviceState_1);
 		digitalWrite(led_state_1, deviceState_1);
 		state_Device_sendtoHC[0] = deviceState_1;
+    state_Device_sendtoHC[1] = deviceState_2;
+    state_Device_sendtoHC[2] = deviceState_3;
 		EEPROM.update(0, deviceState_1);
 
 		radio.openWritingPipe(address);
-		radio.write(&state_Device_sendtoHC[0], sizeof(state_Device_sendtoHC));
+		radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
 	}
 
   if (check_Button_2)
@@ -152,11 +154,13 @@ void loop()
 		deviceState_2 = !deviceState_2;
 		digitalWrite(control_2, deviceState_2);
 		digitalWrite(led_state_2, deviceState_2);
+    state_Device_sendtoHC[0] = deviceState_1;
 		state_Device_sendtoHC[1] = deviceState_2;
+    state_Device_sendtoHC[2] = deviceState_3;
 		EEPROM.update(1, deviceState_2);
 
 		radio.openWritingPipe(address);
-		radio.write(&state_Device_sendtoHC[1], sizeof(state_Device_sendtoHC));
+		radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
 	}
 
   if (check_Button_3)
@@ -165,10 +169,12 @@ void loop()
 		deviceState_3 = !deviceState_3;
 		digitalWrite(control_3, deviceState_3);
 		digitalWrite(led_state_3, deviceState_3);
-		state_Device_sendtoHC[2] = deviceState_3;
+		state_Device_sendtoHC[0] = deviceState_1;
+    state_Device_sendtoHC[1] = deviceState_2;
+    state_Device_sendtoHC[2] = deviceState_3;
 		EEPROM.update(2, deviceState_3);
 
 		radio.openWritingPipe(address);
-		radio.write(&state_Device_sendtoHC[2], sizeof(state_Device_sendtoHC));
+		radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
 	}
 }
