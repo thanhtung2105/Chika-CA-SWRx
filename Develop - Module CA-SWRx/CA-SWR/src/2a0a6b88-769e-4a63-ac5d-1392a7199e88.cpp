@@ -1,8 +1,3 @@
-#include <Arduino.h>
-#include <EEPROM.h>
-#include <RF24.h>
-#include <SPI.h>
-
 /*
 	Product code: 2a0a6b88-769e-4a63-ac5d-1392a7199e88
 	RF channel (1 button): 83878226022001
@@ -13,6 +8,11 @@
 + 'date make device' + 'product no.' ; In this case, SWR is known as '83 87 82' and add with the date 
 making device for example today is Feb 17th and this is the first product in that day; then the address 
 for this SWR is: const byte address[15] = "83878217022001"	( 83 87 82 | 17 02 20 | 01 )					*/
+
+#include <Arduino.h>
+#include <EEPROM.h>
+#include <RF24.h>
+#include <SPI.h>
 
 RF24 radio(9, 10);						   //nRF24L01 (CE,CSN) connections PIN
 const byte address[15] = "83878226022001"; //Changeable
@@ -46,7 +46,7 @@ int isButton_Click(int GPIO_to_read)
 	int out = 0;
 	while (digitalRead(GPIO_to_read) == 1)
 	{
-		delay(20);
+		delay(50);
 		out = 1;
 	}
 	return out;
