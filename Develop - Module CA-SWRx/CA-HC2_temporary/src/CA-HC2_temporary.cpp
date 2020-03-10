@@ -235,14 +235,14 @@ void loop()
     radio.read(&stateButton, sizeof(stateButton));
 
     if (stateButton[0])
-      client.publish(CA_SWR_1, "1");
+      client.publish(CA_SWR_1, "1", true);
     else
-      client.publish(CA_SWR_1, "0");
+      client.publish(CA_SWR_1, "0", true);
 
     if (stateButton[1])
-      client.publish(CA_SWR_2, "1");
+      client.publish(CA_SWR_2, "1", true);
     else
-      client.publish(CA_SWR_2, "0");
+      client.publish(CA_SWR_2, "0", true);
 
     stateButton_MQTT[0] = stateButton[0];
     stateButton_MQTT[1] = stateButton[1];
