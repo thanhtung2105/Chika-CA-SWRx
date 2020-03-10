@@ -26,7 +26,7 @@ const byte address[15] = "**************";
 boolean stateButton[1];
 boolean stateButton_MQTT[1];
 
-//Topic: product_id/button_id
+//Topic: product_id/button_id             char[37] = b
 const char *CA_SWR = "2a0a6b88-769e-4a63-ac5d-1392a7199e88/be47fa93-15df-44b6-bdba-c821a117cd41";
 const int smartConfig_LED = 16;
 
@@ -140,7 +140,7 @@ void callback(char *topic, byte *payload, unsigned int length)
   }
   Serial.println();
 
-  if ((char)topic[5] == 'b')
+  if ((char)topic[37] == 'b')
     switch ((char)payload[0])
     {
     case '1':
@@ -219,12 +219,11 @@ void loop()
     memset(&stateButton, ' ', sizeof(stateButton));
     radio.read(&stateButton, sizeof(stateButton));
     stateButton_MQTT[0] = stateButton[0];
-    stateButton_MQTT[1] = stateButton[1];
 
     if (stateButton[0])
-      client.publish(CA_SWR, "1");
+      client.publish(CA_SWR, "1", true);
     else
-      client.publish(CA_SWR, "0");
+      client.publish(CA_SWR, "0", true);
 
     //       if(stateButton[1])
     //            client.publish(CA_SWR_2,"1");
