@@ -18,7 +18,7 @@ using namespace std;
 int CE = 9;
 int CSN = 10;
 RF24 radio(CE, CSN);                         //nRF24L01 (CE,CSN) connections PIN
-const byte address[15] = "83878226022002"; //Changeable
+const uint64_t address = 0xE8E8F0F0A2LL; //Changeable
 
 const int button_1 = 5;
 const int button_2 = 6;
