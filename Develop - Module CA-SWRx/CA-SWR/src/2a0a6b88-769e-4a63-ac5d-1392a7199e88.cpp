@@ -15,7 +15,7 @@ for this SWR is: const byte address[15] = "83878217022001"	( 83 87 82 | 17 02 20
 #include <SPI.h>
 
 RF24 radio(9, 10);						   //nRF24L01 (CE,CSN) connections PIN
-const byte address[15] = "83878226022001"; //Changeable
+const uint64_t address = 0xE8E8F0F0A1LL; //Changeable
 
 const int button = 5;
 const int control = 2;
