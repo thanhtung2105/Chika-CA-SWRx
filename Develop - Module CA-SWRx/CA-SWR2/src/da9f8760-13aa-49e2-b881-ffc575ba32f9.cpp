@@ -1,7 +1,12 @@
-/* In this product - the address (channel) to communicate is define as SWR (convert to decimal) 
-+ 'date make device' + 'product no.' ; In this case, SWR is known as '83 87 82' and add with the date 
-making device for example today is Feb 17th and this is the second product in that day; then the address 
-for this SWR is: const byte address[15] = "83878217022002"	( 83 87 82 | 17 02 20 | 02 )					
+/* In this product - the address (channel) to communicate is define as <the code of product> (2 degits)
++ <timestamp_of_production> (10 degits). With list product code:
+- CA-SWR: 10;
+- CA-SWR2: 20;
+- CA-SWR3: 30;
+And the timestamp when we create the product, so we have this list:        
+CA-SWR: 101584324363 (12)
+CA-SWR2: 201584324393 (12)
+CA-SWR3: 301584324410 (12)
 
 	Product code: da9f8760-13aa-49e2-b881-ffc575ba32f9
 	RF channel (2 button): 83878226022002
@@ -18,7 +23,7 @@ using namespace std;
 int CE = 9;
 int CSN = 10;
 RF24 radio(CE, CSN);                         //nRF24L01 (CE,CSN) connections PIN
-const uint64_t address = 0xE8E8F0F0A2LL; //Changeable
+const uint64_t address = 201584324393; //Changeable
 
 const int button_1 = 5;
 const int button_2 = 6;
