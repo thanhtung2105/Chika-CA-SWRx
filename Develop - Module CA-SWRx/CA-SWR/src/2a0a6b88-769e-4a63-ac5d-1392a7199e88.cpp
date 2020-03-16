@@ -4,10 +4,16 @@
 	Button topic: be47fa93-15df-44b6-bdba-c821a117cd41
 */
 
-/* In this product - the address (channel) to communicate is define as SWR (convert to decimal) 
-+ 'date make device' + 'product no.' ; In this case, SWR is known as '83 87 82' and add with the date 
-making device for example today is Feb 17th and this is the first product in that day; then the address 
-for this SWR is: const byte address[15] = "83878217022001"	( 83 87 82 | 17 02 20 | 01 )					*/
+/* In this product - the address (channel) to communicate is define as <the code of product> (2 degits)
++ <timestamp_of_production> (10 degits). With list product code:
+- CA-SWR: 10;
+- CA-SWR2: 20;
+- CA-SWR3: 30;
+And the timestamp when we create the product, so we have this list:        
+CA-SWR: 101584324363 (12)
+CA-SWR2: 201584324393 (12)
+CA-SWR3: 301584324410 (12)
+*/
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -15,7 +21,7 @@ for this SWR is: const byte address[15] = "83878217022001"	( 83 87 82 | 17 02 20
 #include <SPI.h>
 
 RF24 radio(9, 10);						   //nRF24L01 (CE,CSN) connections PIN
-const uint64_t address = 0xE8E8F0F0A1LL; //Changeable
+const uint64_t address = 101584324363; 	   //Changeable
 
 const int button = 5;
 const int control = 2;
