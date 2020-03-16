@@ -1,78 +1,49 @@
-/* In this product - the address (channel) to communicate is define as SWR (convert to decimal) 
-+ 'date make device' + 'product no.' ; In this case, SWR is known as '83 87 82' and add with the date 
-making device for example today is Feb 17th and this is the third product in that day; then the address 
-for this SWR is: const byte address[15] = "83878217022003"  ( 83 87 82 | 17 02 20 | 03 )          
+/*
+  Product code: 2a0a6b88-769e-4a63-ac5d-1392a7199e88
+  RF channel (1 button): 83878226022001
+  Button topic: be47fa93-15df-44b6-bdba-c821a117cd41
+*/
 
-  Product code: 740a8d1e-c649-475e-a270-c5d9a44b40a8
-  RF channel (3 button): 83878226022002
-  Button topic: 774f2306-51ad-4bf1-ba9e-0ddee9bd2375
-                5124ba3a-7a45-472b-8468-6f2a041733ac
-                a0087ff7-3613-442f-b6c5-0d5d2f0f1a30
+/* In this product - the address (channel) to communicate is define as <the code of product> (2 degits)
++ <timestamp_of_production> (10 degits). With list product code:
+- CA-SWR: 10;
+- CA-SWR2: 20;
+- CA-SWR3: 30;
+And the timestamp when we create the product, so we have this list:        
+CA-SWR: 101584324363 (12)
+CA-SWR2: 201584324393 (12)
+CA-SWR3: 301584324410 (12)
 */
 
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <RF24.h>
 #include <SPI.h>
-using namespace std;
 
-int CE = 9;
-int CSN = 10;
-RF24 radio(CE, CSN);                         //nRF24L01 (CE,CSN) connections PIN
-const uint64_t address = 0xE8E8F0F0A3LL; //Changeable
+RF24 radio(9, 10);               //nRF24L01 (CE,CSN) connections PIN
+const uint64_t address = 0x17A6E5C70BLL;     //Changeable
 
-const int button_1 = 5;
-const int button_2 = 6;
-const int button_3 = 7;
-const int control_1 = 2;
-const int control_2 = 3;
-const int control_3 = 4;
-const int led_state_1 = A3;
-const int led_state_2 = A2;
-const int led_state_3 = A1;
+const int button = 5;
+const int control = 2;
+const int led_state = A2;
 
-int deviceState_1, deviceState_2, deviceState_3;
+int deviceState;
 
-boolean state_Device_sendtoHC[3];
-boolean state_Device_controlfromHC[3];
+boolean state_Device_sendtoHC[1];
+boolean state_Device_controlfromHC[1];
 
-void checkDevicesState()
+void checkDeviceState()
 {
-  deviceState_1 = EEPROM.read(0);
-  deviceState_2 = EEPROM.read(1);
-  deviceState_3 = EEPROM.read(2);
-
-  if (deviceState_1)
+  deviceState = EEPROM.read(0);
+  if (deviceState == 1)
   {
-    digitalWrite(control_1, HIGH);
-    digitalWrite(led_state_1, HIGH);
+    digitalWrite(control, HIGH);
+    digitalWrite(led_state, HIGH);
   }
-  else
+  if (deviceState == 0)
   {
-    digitalWrite(control_1, LOW);
-    digitalWrite(led_state_1, LOW);
-  }
-
-  if (deviceState_2)
-  {
-    digitalWrite(control_2, HIGH);
-    digitalWrite(led_state_2, HIGH);
-  }
-  else
-  {
-    digitalWrite(control_2, LOW);
-    digitalWrite(led_state_2, LOW);
-  }
-
-  if (deviceState_3)
-  {
-    digitalWrite(control_3, HIGH);
-    digitalWrite(led_state_3, HIGH);
-  }
-  else
-  {
-    digitalWrite(control_3, LOW);
-    digitalWrite(led_state_3, LOW);
+    digitalWrite(control, LOW);
+    digitalWrite(led_state, LOW);
   }
 }
 
@@ -91,19 +62,12 @@ void setup()
 {
   SPI.begin();
   Serial.begin(9600);
-  Serial.println("\nCA-SWR3 say hello to your home <3 ! ");
-  pinMode(button_1, INPUT);
-  pinMode(button_2, INPUT);
-  pinMode(button_3, INPUT);
-  pinMode(control_1, OUTPUT);
-  pinMode(control_2, OUTPUT);
-  pinMode(control_3, OUTPUT);
-  pinMode(led_state_1, OUTPUT);
-  pinMode(led_state_2, OUTPUT);
-  pinMode(led_state_3, OUTPUT);
-  pinMode(CSN, OUTPUT);
+  Serial.println("\nCA-SWR say hello to your home <3 ! ");
+  pinMode(button, INPUT);
+  pinMode(control, OUTPUT);
+  pinMode(led_state, OUTPUT);
 
-  checkDevicesState();
+  checkDeviceState();
   radio.begin();
   radio.setRetries(15, 15);
   radio.setPALevel(RF24_PA_MAX);
@@ -118,66 +82,25 @@ void loop()
   {
     memset(&state_Device_controlfromHC, ' ', sizeof(state_Device_controlfromHC));
     radio.read(&state_Device_controlfromHC, sizeof(state_Device_controlfromHC));
-  
-    digitalWrite(control_1, state_Device_controlfromHC[0]);
-    digitalWrite(led_state_1, state_Device_controlfromHC[0]);
-    deviceState_1 = state_Device_controlfromHC[0];
-
-    digitalWrite(control_2, state_Device_controlfromHC[1]);
-    digitalWrite(led_state_2, state_Device_controlfromHC[1]);
-    deviceState_2 = state_Device_controlfromHC[1];
-
-    digitalWrite(control_3, state_Device_controlfromHC[2]);
-    digitalWrite(led_state_3, state_Device_controlfromHC[2]);
-    deviceState_3 = state_Device_controlfromHC[2];
+    Serial.println("Receive: ");
+    Serial.println(state_Device_controlfromHC[0]);
+    digitalWrite(control, state_Device_controlfromHC[0]);
+    digitalWrite(led_state, state_Device_controlfromHC[0]);
+    deviceState = state_Device_controlfromHC[0];
   }
 
-  boolean check_Button_1 = isButton_Click(button_1);
-  boolean check_Button_2 = isButton_Click(button_2);
-  boolean check_Button_3 = isButton_Click(button_3);
+  boolean check_Button = isButton_Click(button);
 
-  if (check_Button_1)
+  if (check_Button)
   {
     radio.stopListening();
-    deviceState_1 = !deviceState_1;
-    digitalWrite(control_1, deviceState_1);
-    digitalWrite(led_state_1, deviceState_1);
-    state_Device_sendtoHC[0] = deviceState_1;
-    state_Device_sendtoHC[1] = deviceState_2;
-    state_Device_sendtoHC[2] = deviceState_3;
-    EEPROM.update(0, deviceState_1);
+    deviceState = !deviceState;
+    digitalWrite(control, deviceState);
+    digitalWrite(led_state, deviceState);
+    state_Device_sendtoHC[0] = deviceState;
+    EEPROM.update(0, deviceState);
 
     radio.openWritingPipe(address);
-    radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
-  }
-
-  if (check_Button_2)
-  {
-    radio.stopListening();
-    deviceState_2 = !deviceState_2;
-    digitalWrite(control_2, deviceState_2);
-    digitalWrite(led_state_2, deviceState_2);
-    state_Device_sendtoHC[0] = deviceState_1;
-    state_Device_sendtoHC[1] = deviceState_2;
-    state_Device_sendtoHC[2] = deviceState_3;
-    EEPROM.update(1, deviceState_2);
-
-    radio.openWritingPipe(address);
-    radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
-  }
-
-  if (check_Button_3)
-  {
-    radio.stopListening();
-    deviceState_3 = !deviceState_3;
-    digitalWrite(control_3, deviceState_3);
-    digitalWrite(led_state_3, deviceState_3);
-    state_Device_sendtoHC[0] = deviceState_1;
-    state_Device_sendtoHC[1] = deviceState_2;
-    state_Device_sendtoHC[2] = deviceState_3;
-    EEPROM.update(2, deviceState_3);
-
-    radio.openWritingPipe(address);
-    radio.write(&state_Device_sendtoHC, sizeof(state_Device_sendtoHC));
+    radio.write(&state_Device_sendtoHC[0], sizeof(state_Device_sendtoHC));
   }
 }
