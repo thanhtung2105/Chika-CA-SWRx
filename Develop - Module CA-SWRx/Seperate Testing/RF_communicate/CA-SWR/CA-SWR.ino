@@ -4,15 +4,11 @@
   Button topic: be47fa93-15df-44b6-bdba-c821a117cd41
 */
 
-/* In this product - the address (channel) to communicate is define as <the code of product> (2 degits)
-+ <timestamp_of_production> (10 degits). With list product code:
-- CA-SWR: 10;
-- CA-SWR2: 20;
-- CA-SWR3: 30;
-And the timestamp when we create the product, so we have this list:        
-CA-SWR: 101584324363 (12)
-CA-SWR2: 201584324393 (12)
-CA-SWR3: 301584324410 (12)
+/* In this product - the address (channel) to communicate is define as <the HC code> (3 degits)
++ <company code> (7 degits) + <product code> (3 degits). So we have the following list product code:      
+CA-SWR: 1002502019001 (13)
+CA-SWR2: 1002502019002 (13)
+CA-SWR3: 1002502019003 (13)
 */
 
 #include <Arduino.h>
@@ -21,7 +17,7 @@ CA-SWR3: 301584324410 (12)
 #include <SPI.h>
 
 RF24 radio(9, 10);               //nRF24L01 (CE,CSN) connections PIN
-const uint64_t address = 0x17A6E5C70BLL;     //Changeable
+const uint64_t address = 1002502019001;      //Changeable
 
 const int button = 5;
 const int control = 2;
