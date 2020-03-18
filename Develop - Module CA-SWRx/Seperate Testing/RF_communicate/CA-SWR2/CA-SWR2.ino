@@ -1,12 +1,8 @@
-/* In this product - the address (channel) to communicate is define as <the code of product> (2 degits)
-+ <timestamp_of_production> (10 degits). With list product code:
-- CA-SWR: 10;
-- CA-SWR2: 20;
-- CA-SWR3: 30;
-And the timestamp when we create the product, so we have this list:        
-CA-SWR: 101584324363 (12)
-CA-SWR2: 201584324393 (12)
-CA-SWR3: 301584324410 (12)
+/* In this product - the address (channel) to communicate is define as <the HC code> (3 degits)
++ <company code> (7 degits) + <product code> (3 degits). So we have the following list product code:      
+CA-SWR: 1002502019001 (13)
+CA-SWR2: 1002502019002 (13)
+CA-SWR3: 1002502019003 (13)
 
   Product code: da9f8760-13aa-49e2-b881-ffc575ba32f9
   RF channel (2 button): 83878226022002
@@ -23,7 +19,7 @@ using namespace std;
 int CE = 9;
 int CSN = 10;
 RF24 radio(CE, CSN);                         //nRF24L01 (CE,CSN) connections PIN
-const uint64_t address = 101584324393; //Changeable
+const uint64_t address = 1002502019002; //Changeable
 
 const int button_1 = 5;
 const int button_2 = 6;
