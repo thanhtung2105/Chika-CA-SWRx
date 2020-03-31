@@ -32,5 +32,7 @@ My Graduate Thesis project work co-operate with Chika Corporation 智家 (チカ
 
 ![89030933_233387297703501_5613319258537721856_n](https://user-images.githubusercontent.com/48848418/75621851-5a9e4800-5bcc-11ea-9ccf-0898f9f95c31.png)
 
+![CA-SWR](https://user-images.githubusercontent.com/48848418/78027700-fc5db400-7387-11ea-9f87-510fa0e86817.png)
+
 
     Author: Phan Thanh Tung
