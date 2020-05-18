@@ -25,8 +25,8 @@ const int led_state = A2;
 
 int deviceState;
 
-boolean state_Device_sendtoHC[1];
-boolean state_Device_controlfromHC[1];
+float state_Device_sendtoHC[1];
+float state_Device_controlfromHC[1];
 
 void checkDeviceState()
 {
@@ -80,9 +80,9 @@ void loop()
     radio.read(&state_Device_controlfromHC, sizeof(state_Device_controlfromHC));
     Serial.println("Receive: ");
     Serial.println(state_Device_controlfromHC[0]);
-    digitalWrite(control, state_Device_controlfromHC[0]);
-    digitalWrite(led_state, state_Device_controlfromHC[0]);
-    deviceState = state_Device_controlfromHC[0];
+    digitalWrite(control, (boolean)state_Device_controlfromHC[0]);
+    digitalWrite(led_state, (boolean)state_Device_controlfromHC[0]);
+    deviceState = (boolean)state_Device_controlfromHC[0];
   }
 
   boolean check_Button = isButton_Click(button);
@@ -93,7 +93,7 @@ void loop()
     deviceState = !deviceState;
     digitalWrite(control, deviceState);
     digitalWrite(led_state, deviceState);
-    state_Device_sendtoHC[0] = deviceState;
+    state_Device_sendtoHC[0] = (boolean)deviceState;
     EEPROM.update(0, deviceState);
 
     radio.openWritingPipe(address);
